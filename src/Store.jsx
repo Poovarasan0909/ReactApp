@@ -23,7 +23,7 @@ export default class Store {
                 const fileData = JSON.stringify(newItem);
                 const blob = new Blob([fileData], {type: "text/plain"});
                 const url = URL.createObjectURL(blob);
-                const link = document.createElement('c');
+                const link = document.createElement('a');
                 link.download = `fileData.json`;
                 link.href = url;
                 link.click();
