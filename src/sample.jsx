@@ -29,7 +29,12 @@ class Sample extends Component {
                        <span id ="genderErr"></span>
                      </div><br/>
                   <button onClick={this.Store.saveData}>Save!</button> &nbsp;&nbsp; <button onClick = {this.Store.download}>Download</button>
-
+                   <Link to="/dashboard">
+                       <button type="button">
+                            Click Me!
+                       </button>
+                   </Link>
+                   <a href="http://localhost:8080/b0717eb7-8a76-404e-a69d-6595428f9a6d/error"> <button>Link</button></a>
                 </div>
               );
           }
