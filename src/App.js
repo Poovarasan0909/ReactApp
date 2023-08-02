@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
-import Sample from "./sample";
+//import Sample from "./sample";
+import TableComponent from './TableComponent';
 
 function App() {
   return (
   <div>
     <div className="App">
-         <Sample />
+         <TableComponent />
     </div><br/><br/>
      <footer><p><small><u style={{color:"grey"}}>created by </u></small>Poovarasan</p></footer>
     </div>
