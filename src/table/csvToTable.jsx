@@ -26,7 +26,7 @@ class CsvToTable extends React.Component {
 
         const header = csvData[0].split(',');
         const data = [];
-        for (let i = 1; i < csvData.length; i++) {
+        for (let i = 1; i < csvData.length-1; i++) {
             data.push(csvData[i].split(','));
         }
 
