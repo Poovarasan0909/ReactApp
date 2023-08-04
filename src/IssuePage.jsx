@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TableStore from './TableStore';
-import CsvToTable from './csvToTable';
+import CsvToTable from './table/csvToTable';
 import { observer } from 'mobx-react';
 
 class IssuePage extends Component {

@@ -1,0 +1,6 @@
+.transparent-input {
+    border: 0;
+    background: transparent;
+    text-align: center;
+    outline: none;
+}
