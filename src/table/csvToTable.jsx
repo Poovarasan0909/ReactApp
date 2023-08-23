@@ -3,6 +3,7 @@ import '../css/table.css';
 import { observer } from 'mobx-react';
 import CsvTableStore from './csvTableStore'
 import {SaveIcon, PlusIcon, CancelIcon} from '../react-icons/icons';
+import App1 from './CsvWriter.js';
 
 class CsvToTable extends React.Component {
 
@@ -12,7 +13,7 @@ class CsvToTable extends React.Component {
     }
 
     render() {
-        const {isEditAble, isSave} = this.csvTableStore;
+        const {isEditAble, isSave,MyComponent} = this.csvTableStore;
         const { csvData } = this.props;
 
         if (!csvData || csvData.length === 0) {
@@ -56,15 +57,16 @@ class CsvToTable extends React.Component {
                     <tr>
                         {Array(header.length).fill('').map((_, cellIndex) => (
                             <td key={cellIndex} style={{ border: '1px solid black' }} >
-                                {(cellIndex !== 0) ?  <input type="text" className="transparent-input"/> : data.length}</td>
+                                {(cellIndex !== 0) ?  <input type="text" className="transparent-input"/> : data.length+1}</td>
                         ))}
                         {<span onClick={this.csvTableStore.saveOnClick} style={{ cursor: 'pointer' }}> <SaveIcon/> </span>}
                         {<span onClick={this.csvTableStore.cancelOnClick} style={{ cursor: 'pointer' }}> <CancelIcon/> </span> }
                     </tr>}
                     </tbody>
 
-                </table>
+                </table> <br/><br/>
 
+              <MyComponent />
             </div>
         );
     }
