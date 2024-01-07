@@ -4,3 +4,86 @@
     text-align: center;
     outline: none;
 }
+.dashed-line {
+    border: 1px dashed darkgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+}
+.circleCheck {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 255, 0, 0.4);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: '\2713';
+    color: white;
+}
+/*.circleStyle {*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    border-radius: 50%;*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    border: 1px solid #000;*/
+/*}*/
+
+/*.circleStyle {*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    border-radius: 50%;*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    border: 1px solid #000;*/
+/*    transition: background-color 0.3s ease, opacity 0.3s ease;*/
+/*}*/
+
+/*.circleStyle.clicked {*/
+/*    background-color: rgba(0, 255, 0, 0.4); !* Green color with 40% transparency *!*/
+/*}*/
+
+/*.circleStyle.clicked #innerIcon {*/
+/*    color: green; !* Change the inner icon color to green *!*/
+/*}*/
+
+.circleStyle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.circleStyle.clicked {
+    background-color: rgba(0, 255, 0, 0.4);
+    opacity: 0.5;
+}
+
+#innerIcon, #checkIcon {
+  transition: filter 0.3s ease, opacity 0.3s ease
+/*    position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+
+/*#checkIcon {*/
+/*    color: green; !* Change the check icon color to green *!*/
+/*}*/
+
+/*.blurred {*/
+
+/*}*/
+
