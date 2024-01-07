@@ -1,0 +1,50 @@
+
+**title** - hii i am working
+```javascript
+import React, { useState } from "react";
+import axios from "axios";
+
+const FileDownload = () => {
+  const [file, setFile] = useState(null);
+
+  const downloadFile = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/file.txt", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", "file.txt");
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={downloadFile}>Download File</button>
+    </div>
+  );
+};
+
+export default FileDownload;
+```
+-jgjgbjh
+This code uses the `axios` library to make a GET request to a server and download a file. The `responseType` property is set to "blob" to indicate that the response should be returned as a Blob object. The Blob object is then converted to a URL using the `window.URL.createObjectURL()` method. A link element is created and the URL is set as the `href` attribute. The `download` attribute is set to "file.txt" to specify the name of the downloaded file. Finally, the `click()` method is called on the link element to start the download.
+```ghgghgghghghhg```
+- **hiiii**
+```kfbcnkgbkfhdhk```
+* **vvgvv** kjnkl
+```dgjbffbfbfn
+fgkfdkb dfbgb
+dfbgndb
+mdgfbd
+dngb
+kjjjjjjjn```
+``
+yt
+1111```
