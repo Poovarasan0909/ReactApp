@@ -1,0 +1,19 @@
+.scrollableDiv {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollableDiv {
+    scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit (Safari, Chrome, etc.) */
+.scrollableDiv::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for Internet Explorer and Edge */
+.scrollableDiv {
+    -ms-overflow-style: none;
+}

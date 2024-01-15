@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPaperPlane} from '@fortawesome/free-solid-svg-icons';
 import {inputTest, StoreInput, codeInput} from './InputTest';
@@ -13,8 +13,23 @@ class gemini_api extends React.Component {
         this.state = {
             response: [],
             question: '',
+            scrollPosition: 0,
             loading : false
         };
+    }
+
+    handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = this.scrollableDiv;
+        const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+        this.setState({ scrollPosition: scrollPercentage });
+    };
+
+    componentDidMount() {
+        this.scrollableDiv.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        this.scrollableDiv.removeEventListener('scroll', this.handleScroll);
     }
 
     getResponseFromAI = (prompt) => {
@@ -31,7 +46,7 @@ class gemini_api extends React.Component {
         }
 
         run().then(res => {
-            StoreInput().then((r) => {
+            codeInput().then((r) => {
             const response = this.reformatResponse(r);
             console.log("formatted response -->",response)
             response.map((element) =>
@@ -45,6 +60,7 @@ class gemini_api extends React.Component {
 
     reformatResponse = (text) => {
         const lines = text.split('\n');
+        let isLineForProgramName = false;
         console.log(lines, "linessss")
         const formattedResponse = [];
 
@@ -54,27 +70,47 @@ class gemini_api extends React.Component {
         codeContainer.className = "code-container";
 
         lines.forEach((line, index) => {
-            let spaceStarCheck = /^\s*\*/gm;
+            let spaceStarCheck = /^\s*\*\s/gm;
             let spaceHypenCheck = /^\s*-/gm;
-            let startWithDigitStar = /^\s*\d+\.\s+\*\*/gm;
             const codeElement = document.createElement('code');
             const preElement = document.createElement('pre');
             line = line.replace(/^s+/, '')
             if (line.startsWith("```") || line.endsWith("```")) {
                 let completeCodeLine = /```([\s\S]*?)```/g;
                 if (completeCodeLine.test(line)) {
-                    codeElement.textContent = line.replace(/```/g, "")
+                    const words = line.replace(/```/g, "").split(' ');
+                    const firstWord = words[0];
+
+                    let code_header = document.createElement('div');
+                    code_header.className = "code-header";
+                    code_header.textContent = firstWord;
+                    codeContainer.appendChild(code_header);
+
+                    codeElement.textContent = words.slice(1).join(' ');
                     preElement.appendChild(codeElement)
                     codeContainer.appendChild(preElement)
                     formattedResponse.push(codeContainer)
+
                     codeContainer = document.createElement('div');
                     codeContainer.className = "code-container";
                     isCodeLine = 'oneLine'
                 } else {
                     if (isCodeLine === '') {
-                        codeElement.textContent = line.replace(/```/g, "")
-                        preElement.appendChild(codeElement)
-                        codeContainer.appendChild(preElement)
+                        if(line === '```') {
+                            isLineForProgramName = true;
+                        }
+                        const words = line.replace(/```/g, "").split(' ');
+                        const firstWord = words[0];
+
+                        let code_header = document.createElement('div');
+                        code_header.className = "code-header";
+                        code_header.textContent = firstWord;
+                        codeContainer.appendChild(code_header);
+                        if(words.slice(1).join(' ').length > 0) {
+                            codeElement.textContent = words.slice(1).join(' ');
+                            preElement.appendChild(codeElement)
+                            codeContainer.appendChild(preElement)
+                        }
                         isCodeLine = 'start';
                         isCodeFirstLine = true;
                     } else if (isCodeLine === 'start') {
@@ -90,7 +126,19 @@ class gemini_api extends React.Component {
             } else isCodeFirstLine = false;
 
             if (isCodeLine === 'start' && !isCodeFirstLine) {
-                codeElement.textContent = line
+                let words = line
+                let code_header = document.createElement('div');
+                if(isLineForProgramName){
+                    words = line.split(" ")
+                    const firstWord = words[0];
+                    words = words.slice(1).join(' ');
+                    code_header.className = "code-header";
+                    code_header.textContent = firstWord;
+                    isLineForProgramName = false
+                }
+                codeContainer.appendChild(code_header);
+
+                codeElement.textContent = words
                 preElement.appendChild(codeElement)
                 codeContainer.appendChild(preElement)
             }
@@ -131,7 +179,7 @@ class gemini_api extends React.Component {
         if(event.key === 'Enter')  {
             document.getElementById("response_element").innerHTML = ''
             let prompt = document.getElementById("prompt_inputs").value
-            if(prompt.length > 0) {
+            if(prompt.length >= 0) {
                 document.getElementById("prompt_inputs").value = ''
                 this.getResponseFromAI(prompt)
                 this.setState({question : prompt, response: []})
@@ -140,6 +188,7 @@ class gemini_api extends React.Component {
     }
 
     render() {
+        const defaultMarginRight = -55;
         return (
             <div style={{
                 display: 'flex',
@@ -151,21 +200,53 @@ class gemini_api extends React.Component {
                 <div className="title-container">
                     <h1 className="title">IAmAI</h1>
                 </div>
-                <div id="res" className="response_container">
+                <div style={{
+                           color: 'skyblue',
+                           marginLeft: `${defaultMarginRight+(this.state.scrollPosition*1.1)}`+'%'
+                }}>
+                    {Math.floor(this.state.scrollPosition) > 0 ? Math.floor(this.state.scrollPosition)+'%' : ''}</div>
+                <div id="res" className="response_container" ref={(div) => {
+                    this.scrollableDiv = div
+                }}>
+                    <div
+                        style={{
+                            width: `${this.state.scrollPosition}%`,
+                            height: '5px',
+                            background: 'blue',
+                            position: 'sticky',
+                            top: '-30px',
+                            zIndex: '1',
+                        }}
+                    ></div>
+
                     <div className={"question_header"}>{this.state.question}</div>
                     {this.state.question.length > 0 && <div className={"horizontal-line"}></div>}
                     <div>
                         {/*{this.loading && <LoaderActive/>}*/}
+                        {/*<div ref={(div) => {*/}
+                        {/*    this.scrollableDiv = div;*/}
+                        {/*}} style={{overflow: 'scroll', border: '1px solid black'}}>*/}
+                        {/*    <div style={{position: 'sticky', top: '0'}}>*/}
+                        {/*        Loading Line: {this.state.scrollPosition.toFixed(2)}%*/}
+                        {/*        <div*/}
+                        {/*            style={{*/}
+                        {/*                width: `${this.state.scrollPosition}%`,*/}
+                        {/*                height: '5px',*/}
+                        {/*                background: 'blue',*/}
+                        {/*            }}*/}
+                        {/*        ></div>*/}
+                        {/*    </div>*/}
                         <div id={"response_element"}></div>
+                        {/*</div>*/}
                     </div>
                 </div>
-                <br/>
                 <div className={"input-portion"}>
-                    <input type="text" id={"prompt_inputs"} onKeyUp={this.handleKeyDown} placeholder={"Ask what you want to know!"}/>
+                    <input type="text" id={"prompt_inputs"} onKeyUp={this.handleKeyDown}
+                           placeholder={"Ask what you want to know!"}/>
                     <button className="sent_button"
                             onClick={() => {
                                 let prompt = document.getElementById("prompt_inputs").value
-                                if (prompt.length > 0) {
+                                if (prompt.length >= 0) {
                                     this.getResponseFromAI(prompt)
                                     document.getElementById("prompt_inputs").value = ''
                                     this.setState({question: prompt, response: []})

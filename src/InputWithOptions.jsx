@@ -19,9 +19,16 @@ class SingleInput extends Component {
                 { value: 'Option 3', label: 'Option 3' },
             ],
             clicked : false,
+            image:[]
 
         };
         this.handleClick = this.handleClick.bind(this);
+    }
+    handleUpload= (event) => {
+        const file = event.target.files[0];
+        this.state.image.push(file)
+        this.setState({image:this.state.image})
+        console.log(event, file, "   <------------")
     }
     handleClick() {
         this.setState(prevState => ({
@@ -88,6 +95,20 @@ class SingleInput extends Component {
                 </div>
                 <div className={"circleCheck"}></div>
                 <br/><br/>
+
+                <input type="file" onChange={(event) => {
+                    this.handleUpload(event)
+                }}/>
+                <div >
+                    {this.state.image.map((image, index) => (
+                        <img style={{height: '200px', width: '200px'}} key={index} src={URL.createObjectURL(image)} alt={`Image-${index}`}
+                             onClick={() =>{
+                                 this.state.image.splice(index, 1);
+                                 console.log(this.state.image)
+                                 this.setState({image:this.state.image});
+                             }}/>
+                    ))}
+                </div>
 
                 {/*<div style={{marginBottom: '10px'}}>*/}
                 {/*    <FontAwesomeIcon icon={faCheck} style={{color: 'white', fontSize: '40px'}}/>*/}
